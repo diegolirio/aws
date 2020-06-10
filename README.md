@@ -1,3 +1,3 @@
 # aws-private
 
-![](Untitled Diagram.png)
+![](./Untitled Diagram.png)
