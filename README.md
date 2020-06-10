@@ -8,5 +8,5 @@
 
 ### New   
    
-![image](https://github.com/diegolirio/aws/blob/master/AWS-GamoON-Refactor.png?raw=true)
+![image](https://github.com/diegolirio/aws/blob/master/AWS-GamoON-Refactor-v2.png?raw=true)
 
