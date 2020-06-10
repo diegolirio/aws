@@ -1,0 +1,33 @@
+version: '3'
+services:
+  customer:
+    image: registry.springhome.com.br/animalgame:0.0.8-SNAPSHOT
+    container_name: animalgame
+    restart: always
+    ports:
+      - 8080:8080
+      - 80:8080
+    environment:
+      #- DISCOVERY_URL=http://homolog.springhome.com.br:8761/eureka/
+      #- MONGO_DEFAULT_URI=mongodb://user_crud:product@ds241039.mlab.com:41039/customer
+      #- NON_SECURE_PORT=88080
+      #- DOMAIN_NAME=51.15.205.247
+      #- MONGO_URL=mongodb://game-app-1:game_on_123@ds143293.mlab.com:43293/game-on?retryWrites=false
+      - MONGO_URL=mongodb://gameabc:animal123@ds159631.mlab.com:59631/animal-game?retryWrites=false
+      - FRONTEND_URL=http://gameon.springhome.com.br, http://ec2-3-14-27-102.us-east-2.compute.amazonaws.com
+    networks:
+      - game_on
+#  redis:
+#    image: redis
+#    container_name: redis
+#    restart: always
+#    ports:
+#      - 6379:6379
+    #volumes:
+    #    - /var/redis:/redis
+#    networks:
+#      - game_on
+
+networks:
+  game_on:
+    driver: bridge
