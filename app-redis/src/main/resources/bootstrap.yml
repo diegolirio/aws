@@ -12,6 +12,9 @@ spring:
   profiles: develop
   application:
     name: app-redis
+  cloud:
+    config:
+      uri: ${CONFIG_URL:http://localhost:8089}    
 ---
 spring:
   profiles: production

@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping
 @SpringBootApplication
 public class AppRedisApplication {
 
@@ -17,13 +15,5 @@ public class AppRedisApplication {
 		SpringApplication.run(AppRedisApplication.class, args);
 	}
 
-	@Value("${spring.redis.host}")
-	private String redishost;
-
-	@GetMapping
-	public String get() {
-		return redishost;
-	}
-	
 
 }
