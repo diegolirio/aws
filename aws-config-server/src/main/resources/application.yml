@@ -1,0 +1,9 @@
+server:
+  port: 5000
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/diegolirio/aws/aws-configs-store
