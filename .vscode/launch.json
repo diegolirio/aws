@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-AwsConfigServerApplication<aws-config-server>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "br.com.lirio.awsconfigserver.AwsConfigServerApplication",
+            "projectName": "aws-config-server",
+            "args": ""
+        }
+    ]
+}
