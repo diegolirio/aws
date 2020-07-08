@@ -1,0 +1,39 @@
+version: '3'
+services:
+  app:
+    image: diegolirio/redis-as-database:0.1.3-SNAPSHOT
+    container_name: app
+    restart: always
+    ports:
+      - 8080:8080
+      - 80:8080
+    environment:
+      - REDIS_HOST=master.redis-cluster-pr3.81kfs0.sae1.cache.amazonaws.com
+      - REDIS_PORT=6379
+    networks:
+      - elasticache
+      
+  #grafana:
+  #  image: grafana/grafana
+  #  ports:
+  #  - "3000:3000"  
+  #  networks:
+      - elasticache
+      
+  #prometheus:
+  #  image: prom/prometheus:latest
+  #  container_name: prometheus
+  #  ports:
+  #  - 9090:9090
+  #  command:
+  #  - --config.file=/etc/prometheus/prometheus.yml
+  #  volumes:
+  #  - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  #  networks:
+  #    - elasticache
+  #  depends_on:
+  #  - app    
+
+networks:
+  elasticache:
+    driver: bridge

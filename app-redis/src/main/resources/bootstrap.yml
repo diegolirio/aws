@@ -1,0 +1,31 @@
+---
+spring:
+  profiles: default, local
+  application:
+    name: app-redis
+  cloud:
+    config:
+      uri: ${CONFIG_URL:http://localhost:8089}
+      #enabled: false
+---
+spring:
+  profiles: develop
+  application:
+    name: app-redis
+---
+spring:
+  profiles: production
+  application:
+    name: app-redis 
+  cloud:
+    config:
+      name: ${spring.application.name}
+      uri: ${CONFIG_URL:http://aws-config:9092}
+---
+spring:
+  profiles: integration, test
+  application:
+    name: app-redis 
+  cloud:
+    config:
+      enabled: false

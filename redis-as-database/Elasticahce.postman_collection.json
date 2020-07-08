@@ -1,0 +1,81 @@
+{
+	"info": {
+		"_postman_id": "8b3a6e71-85f6-4276-88e2-70b58f506d6b",
+		"name": "Elasticahce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host-aws-ec2}}/v1/products/:id",
+					"host": [
+						"{{host-aws-ec2}}"
+					],
+					"path": [
+						"v1",
+						"products",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "00ef9ffc-098d-4f1a-9feb-e1cb55d441b5",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Products",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"IPhone X\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host-aws-ec2}}/v1/products",
+					"host": [
+						"{{host-aws-ec2}}"
+					],
+					"path": [
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host-aws-ec2}}/v1/products",
+					"host": [
+						"{{host-aws-ec2}}"
+					],
+					"path": [
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

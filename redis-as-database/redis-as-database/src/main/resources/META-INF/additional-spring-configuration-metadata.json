@@ -1,0 +1,11 @@
+{"properties": [
+  {
+    "name": "redis.cluster.nodes",
+    "description": "Host:Port of your nodes"
+  },
+  {
+    "name": "enableCluster",
+    "type": "java.lang.String",
+    "description": "A description for 'enableCluster'"
+  }
+]}

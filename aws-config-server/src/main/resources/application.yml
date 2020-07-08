@@ -1,5 +1,5 @@
 server:
-  port: 5000
+  port: 8089
 
 spring:
   cloud:
@@ -7,4 +7,3 @@ spring:
       server:
         git:
           uri: https://github.com/diegolirio/aws-configs-store
-          #uri: https://github.com/diegolirio/st-configs

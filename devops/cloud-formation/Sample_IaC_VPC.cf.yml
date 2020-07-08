@@ -1,0 +1,197 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+  Meu primeiro template de exemplo... 
+  
+Resources:
+  MinhaVPCDemo:
+    Type: "AWS::EC2::VPC"
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: MinhaVPCDemo
+
+  MeuSecurityGroupDemo:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: MeuSecurityGroupDemo
+      GroupDescription: Meu security Group Demo
+      VpcId: !Ref MinhaVPCDemo
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          FromPort: 22
+          ToPort: 22
+      Tags:
+        - Key: Name
+          Value: MeuSecutiryGroupDemoTag
+
+  MeuInboundSecurityGroupIngressDemo:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref MeuSecurityGroupDemo
+      IpProtocol: "tcp"
+      CidrIp: 0.0.0.0/0
+      FromPort: 80
+      ToPort: 80
+
+  MeuInboundSecurityGroupIngressElastiCache:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref MeuSecurityGroupDemo
+      IpProtocol: "tcp"
+      CidrIp: 0.0.0.0/0
+      FromPort: 6379
+      ToPort: 6379
+
+  MeuInboundSecurityGroupIngressPrometheus:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref MeuSecurityGroupDemo
+      IpProtocol: "tcp"
+      CidrIp: 0.0.0.0/0
+      FromPort: 9090
+      ToPort: 9090
+
+  MeuInboundSecurityGroupIngressGrafana:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref MeuSecurityGroupDemo
+      IpProtocol: "tcp"
+      CidrIp: 0.0.0.0/0
+      FromPort: 3000
+      ToPort: 3000    
+
+  MeuOutboundSecurityGroupEgressDemo:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId: !Ref MeuSecurityGroupDemo
+      IpProtocol: tcp
+      CidrIp: 0.0.0.0/0
+      FromPort: 0
+      ToPort: 65535
+
+  MinhaSubnetPublicaDemo:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.1.0/24
+      VpcId: !Ref MinhaVPCDemo
+      Tags:
+        - Key: Name
+          Value: MinhaSubnetPublicaDemoTag
+
+  MinhaSubnetPrivadaDemo:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.2.0/24
+      VpcId: !Ref MinhaVPCDemo
+      Tags:
+        - Key: Name
+          Value: MinhaSubNetPrivadaDemoTag
+  
+  MinhaRouteTablePublicaDemo:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MinhaVPCDemo
+      Tags:
+        - Key: Name
+          Value: MinhaRouteTablePublicaDemo
+
+  MinhaRouteTablePrivadaDemo:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MinhaVPCDemo
+      Tags:
+        - Key: Name
+          Value: MinhaRouteTablePrivadaDemo 
+
+
+  MinhaSubnetRouteTableAssociationPublicaDemo:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref MinhaRouteTablePublicaDemo
+      SubnetId: !Ref MinhaSubnetPublicaDemo
+      #Key: Name
+      #Value: MinhaSubnetRouteTableAssociationPublicaDemo
+  
+  MinhaSubnetRouteTableAssociationPrivadaDemo:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref MinhaRouteTablePrivadaDemo
+      SubnetId: !Ref MinhaSubnetPrivadaDemo
+      #Key: Name
+      #Value: MinhaSubnetRouteTableAssociationPrivadaDemo
+
+  MinhaRotaPublicaInternetGatewayDemo:
+    Type: "AWS::EC2::Route"
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref MinhaInternetGatewayDemo
+      RouteTableId: !Ref MinhaRouteTablePublicaDemo
+      
+      #Key: Name
+      #Value: MinhaRotaPublicaInternetGatewayDemo
+
+  MinhaRotaPrivadaNatGatewayDemo:
+    Type: "AWS::EC2::Route"
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref MinhaNatGatewayDemo
+      RouteTableId: !Ref MinhaRouteTablePrivadaDemo
+      #Key: Name
+      #Value: MinhaRotaPrivadaNatGatewayDemo
+
+  MinhaInternetGatewayDemo:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: MinhaInternetGatewayDemoTag
+  
+  MinhaAttachGatewayDemo:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref MinhaVPCDemo
+      InternetGatewayId: !Ref MinhaInternetGatewayDemo
+
+  MinhaNatGatewayDemo:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt MinhaElasticIPDemo.AllocationId
+      SubnetId: !Ref MinhaSubnetPublicaDemo
+      Tags:
+        - Key: Name
+          Value: MinhaNatGatewayDemo
+
+  MinhaElasticIPDemo:
+    Type: "AWS::EC2::EIP"
+    Properties:
+      #InstanceId: !Ref MinhaEC2Demo
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: MinhaElasticIPDemo
+Outputs:
+  MinhaVPCExportDemo:
+    Description: Demo Export
+    Value: !Ref MinhaVPCDemo
+    Export:
+      Name: !Sub "${AWS::StackName}-VPCID"
+  MinhaSecurityGroupExportDemo:
+    Description: Demo Export Security Group
+    Value: !Ref MeuSecurityGroupDemo
+    Export:
+      Name: !Sub "${AWS::StackName}-SGID"
+  MinhaSubnetPublicaExportDemo:
+    Description: Demo Export SubNetPublica
+    Value: !Ref MinhaSubnetPublicaDemo
+    Export:
+      Name: !Sub "${AWS::StackName}-SubNetPublicaID"
+  MinhaSubnetPrivadaExportDemo:
+    Description: Demo Export SubNetPublica
+    Value: !Ref MinhaSubnetPrivadaDemo
+    Export:
+      Name: !Sub "${AWS::StackName}-SubNetPrivadaID"

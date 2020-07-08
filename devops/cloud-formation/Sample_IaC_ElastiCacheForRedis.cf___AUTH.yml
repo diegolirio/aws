@@ -1,0 +1,338 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+  Pipeline Infraestructure: ElastiCache for Redis  - v1
+  
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+    - Label:
+        default: 'Parametros VPC'
+      Parameters:
+      - SubnetGroupIds
+      - SecurityGroupIds
+    - Label:
+        default: 'Parametros Cluster'
+      Parameters:
+      - ClusterEnabled
+      - ClusterNameRedis
+      - CacheNodeType
+      - Engine
+      - EngineVersion
+      - NumShards
+      - NumReplicas
+      - Port
+      - CacheNodeType
+    - Label:
+        default: 'Parametros Manutencao'
+      Parameters:  
+      - SnapshotName
+      - SnapshotRetentionLimit
+      - PreferredMaintenanceWindow
+      - SnapshotWindow
+    - Label:
+        default: 'Parametros Seguranca'
+      Parameters:
+      - AtRestEncryptionEnabled
+      - TransitEncryptionEnabled
+      - AuthToken
+    - Label:
+        default: 'Parametros Tags'
+      Parameters:
+      - Sigla
+      - SiglaAPP
+      - Owner
+      - Environment
+      - Keywords
+        
+Parameters:
+
+  ClusterEnabled:
+    Description: 'Modo cluster Habilitado'
+    Type: 'String'
+    Default: 'false'
+    AllowedValues:
+    - 'true'
+    - 'false'
+
+  ClusterNameRedis:
+    Description: 'Um nome para o cluster de cache.'
+    Type: String
+    Default: 'redis-cluster-name'
+    MinLength: 1
+    MaxLength: 40
+
+  SubnetGroupIds: 
+    Description: Uma ou mais sub-redes a ser usado para o cluster
+    Type: "List<AWS::EC2::Subnet::Id>"
+    Default: ''
+  
+  SecurityGroupIds: 
+    Description: Um ou mais grupos de segurança da VPC associados ao cluster.
+    Type: "List<AWS::EC2::SecurityGroup::Id>"
+    Default: ''
+  
+  Engine:
+    Description: 'O nome do mecanismo de cache a ser usada para esse cluster (Redis)'
+    Type: String
+    Default: 'redis'
+    AllowedValues: 
+    - 'redis'
+
+  NumShards:
+    Description: 'Numero de Shards no Cluster (1 = Modo cluster desativado)'
+    Type: Number
+    Default: 1
+    MinValue: 1
+    MaxValue: 99
+
+  NumReplicas:
+    Description: 'Numero de Replicas por Shard (0 - 5 Replicas)'
+    Type: Number
+    Default: 2
+    MinValue: 0
+    MaxValue: 5
+  
+  Port:
+    Description: 'O numero da porta na qual cada um dos nos de cache aceitara conexoes.'
+    Type: Number
+    Default: 6379
+    MinValue: '1'
+    MaxValue: '65535'
+
+  EngineVersion:
+    Description: 'O numero da versão do mecanismo de cache a ser usado nesse cluster'
+    Type: String
+    Default: '5.0.0'
+    AllowedValues: 
+    - '5.0.4'
+    - '5.0.0'
+    - '4.0.10'
+    - '3.2.6' # 3.2.4 and 3.2.10 do not support encryption
+
+  TransitEncryptionEnabled:
+    Description: 'Um sinalizador que permite criptografia em trânsito quando definido como true.'
+    Type: 'String'
+    Default: 'true'
+    AllowedValues:
+    - 'true'
+    - 'false'
+
+  AtRestEncryptionEnabled:
+    Description: 'Um sinalizador que permite criptografia em repouso quando definido como true'
+    Type: 'String'
+    Default: 'true'
+    AllowedValues:
+    - 'true'
+    - 'false'
+  
+  #AuthToken:
+    #Description: 'Parametro reservado. A senha usada para acessar um servidor protegido por senha.'
+    #Type: String
+    #Default: ''
+    #MaxLength: 128
+  
+  Sigla:
+    Description: 'Sigla (Ex. RE2)'
+    Type: String
+    Default: ''
+
+  SiglaAPP:
+    Description: 'Sigla Aplicacao (Ex. RE2_OSLC)'
+    Type: String
+    Default: ''
+
+  Environment:
+    Description: 'Ambiente'
+    Type: String
+    Default: 'dev'
+    AllowedValues: 
+    - 'sandbox'
+    - 'dev'
+    - 'hom'
+    - 'prod'
+
+  Owner:
+    Description: 'Responsavel'
+    Type: String
+    Default: ''
+
+  Keywords:
+    Description: 'Palavras-chaves sobre aplicacao separada por virgula (Ex. palavra1) (Ajustar esse prm)'
+    Type: String
+    Default: 'exemplo1'
+
+  SnapshotRetentionLimit:
+    Description: 'O número de dias durante os quais o ElastiCache retém snapshots automáticos antes de excluí-los (Informe 0 para desabilitar o backup).'
+    Type: Number
+    Default: 1
+    MinValue: 0
+    MaxValue: 35
+
+  SnapshotName:
+    Description: 'O nome de um snapshot do Redis do qual restaurar dados no novo grupo de nós (estilhaço)'
+    Type: 'String'
+    Default: '' 
+
+  PreferredMaintenanceWindow:
+    Description: 'Especifica o período semanal durante o qual a manutenção no cluster é realizada'
+    Type: 'String'
+    Default: 'sat:07:00-sat:08:00'
+    AllowedPattern: >-
+      (mon|tue|wed|thu|fri|sat|sun):\d{2}:\d{2}-(mon|tue|wed|thu|fri|sat|sun):\d{2}:\d{2}
+    ConstraintDescription: >-
+      must be a valid timestamp range with day of week, for example
+      sun:22:00-sun:23:30
+  
+  SnapshotWindow:
+    Description: 'O intervalo de tempo diário (em UTC) durante o qual o ElastiCache começa a executar um snapshot diário de seu grupo de nós (estilhaço)'
+    Type: 'String'
+    Default: '00:00-03:00'
+    AllowedPattern: '\d{2}:\d{2}-\d{2}:\d{2}'
+    ConstraintDescription: 'must be a valid timestamp range, for example 05:00-09:00'
+  
+  CacheNodeType:
+    Description: 'A capacidade de computacao e memória dos nos no grupo de nos (estilhaço).'
+    Type: String
+    Default: cache.t2.micro
+    AllowedValues: 
+    - 'cache.m5.large'
+    - 'cache.m5.xlarge'
+    - 'cache.m5.2xlarge'
+    - 'cache.m5.4xlarge'
+    - 'cache.m5.12xlarge'
+    - 'cache.m5.24xlarge'
+    - 'cache.m4.large'
+    - 'cache.m4.xlarge'
+    - 'cache.m4.2xlarge'
+    - 'cache.m4.4xlarge'
+    - 'cache.m4.10xlarge'
+    - 'cache.t3.micro'
+    - 'cache.t3.small'
+    - 'cache.t3.medium'
+    - 'cache.t2.micro'
+    - 'cache.t2.small'
+    - 'cache.t2.medium'
+    - 'cache.t1.micro'
+    - 'cache.m1.small'
+    - 'cache.m1.medium'
+    - 'cache.m1.large'
+    - 'cache.m1.xlarge'
+    - 'cache.m3.medium'
+    - 'cache.m3.large'
+    - 'cache.m3.xlarge'
+    - 'cache.m3.2xlarge'
+    - 'cache.c1.xlarge'
+    - 'cache.r5.large'
+    - 'cache.r5.xlarge'
+    - 'cache.r5.2xlarge'
+    - 'cache.r5.4xlarge'
+    - 'cache.r5.12xlarge'
+    - 'cache.r5.24xlarge'
+    - 'cache.r4.large'
+    - 'cache.r4.xlarge'
+    - 'cache.r4.2xlarge'
+    - 'cache.r4.4xlarge'
+    - 'cache.r4.8xlarge'
+    - 'cache.r4.16xlarge'
+    - 'cache.m2.xlarge'
+    - 'cache.m2.2xlarge'
+    - 'cache.m2.4xlarge'
+    - 'cache.r3.large'
+    - 'cache.r3.xlarge'
+    - 'cache.r3.2xlarge'
+    - 'cache.r3.4xlarge'
+    - 'cache.r3.8xlarge'
+
+Mappings:
+  EngineVersionMap:
+    '3.2.6':
+      CacheParameterGroup: 'redis3.2'
+    '4.0.10':
+      CacheParameterGroup: 'redis4.0'
+    '5.0.0':
+      CacheParameterGroup: 'redis5.0'
+    '5.0.4':
+      CacheParameterGroup: 'redis5.0'
+
+Conditions:
+  #HasAuthToken: !Not [!Equals [!Ref AuthToken, '']]
+  HasSnapshotName: !Not [!Equals [!Ref SnapshotName, '']]
+  HasClusterEnabled: !Equals [!Ref ClusterEnabled, true]
+  HasAutomaticFailoverEnabled: !Not [!Equals [!Ref NumReplicas, 0]]
+  
+Resources:
+  RedisCacheCluster:
+    Type: "AWS::ElastiCache::ReplicationGroup"
+    Properties:
+      AtRestEncryptionEnabled: !Ref AtRestEncryptionEnabled
+      TransitEncryptionEnabled: !Ref TransitEncryptionEnabled
+      #AuthToken: !If [HasAuthToken, !Ref AuthToken, !Ref 'AWS::NoValue']
+      AuthToken: '{{resolve:secretsmanager:RedisDemo:SecretString:redis_auth}}'
+      AutoMinorVersionUpgrade: true
+      CacheNodeType: !Ref CacheNodeType
+      CacheParameterGroupName: !If [HasClusterEnabled, !Join ['.', ['default', !FindInMap [EngineVersionMap, !Ref EngineVersion, CacheParameterGroup], 'cluster', 'on']], !Join ['.', ['default', !FindInMap [EngineVersionMap, !Ref EngineVersion, CacheParameterGroup]]]]
+      CacheSubnetGroupName: !Ref CacheSubnetGroupName
+      AutomaticFailoverEnabled: !If [HasAutomaticFailoverEnabled, true, false]
+      Engine: !Ref Engine
+      EngineVersion: !Ref EngineVersion
+      NumNodeGroups: !Ref NumShards
+      ReplicasPerNodeGroup: !Ref NumReplicas
+      ReplicationGroupDescription: !Ref 'AWS::StackName'
+      ReplicationGroupId: !Ref ClusterNameRedis
+      Port: !Ref Port
+      #PreferredCacheClusterAZs: !Ref PreferredAvailabilityZone
+      SnapshotName: !If [HasSnapshotName, !Ref SnapshotName, !Ref 'AWS::NoValue']
+      PreferredMaintenanceWindow: !Ref PreferredMaintenanceWindow
+      SnapshotRetentionLimit: !Ref SnapshotRetentionLimit
+      SnapshotWindow: !Ref SnapshotWindow
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-ClusterName
+        - Key: 'sigla'
+          Value: !Ref Sigla
+        - Key: 'sigla-app'
+          Value: !Ref SiglaAPP
+        - Key: 'owner'
+          Value: !Ref Owner
+        - Key: 'environment'
+          Value: !Ref Environment
+        - Key: 'keywords'
+          Value: !Ref Keywords
+      SecurityGroupIds: !Ref SecurityGroupIds
+    UpdatePolicy:
+        UseOnlineResharding: true 
+
+  CacheSubnetGroupName:
+    Type: AWS::ElastiCache::SubnetGroup
+    Properties:
+      CacheSubnetGroupName: sgredis
+      Description: Grupo de Sub Nets para Cluster Redis
+      SubnetIds: !Ref SubnetGroupIds 
+     
+Outputs:
+  TemplateVersion:
+    Description: 'Versao do Template.'
+    Value: '__VERSION__'
+  StackName:
+    Description: 'Stack name.'
+    Value: !Sub '${AWS::StackName}'
+  ClusterName:
+    Description: 'Nome do Cluster'
+    Value: !Ref RedisCacheCluster
+    Export:
+      Name: !Sub '${AWS::StackName}-ClusterName'
+  RedisEndPointConfigurationAddress:
+    Description: 'Endpoint de Configuração (Leitura/Gravacao)'
+    Value: !If [HasClusterEnabled, !GetAtt RedisCacheCluster.ConfigurationEndPoint.Address, 'no_data']
+    Export:
+      Name: RedisEndPointConfigurationAddress
+  RedisPrimaryEndPointAddress:
+    Description: 'Endpoint Master (Leitura/Gravacao)'
+    Value: !If [HasClusterEnabled, 'no_data', !GetAtt RedisCacheCluster.PrimaryEndPoint.Address]
+    Export:
+      Name: RedisPrimaryEndPointAddress
+  RedisReadEndPointAddress:
+    Description: 'Endpoints de Replica (Somente Leitura)'
+    Value: !If [HasClusterEnabled, 'no_data', !GetAtt RedisCacheCluster.ReadEndPoint.Addresses]
+    Export:
+      Name: RedisReadEndPointAddress

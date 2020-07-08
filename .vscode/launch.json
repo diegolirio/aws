@@ -2,6 +2,18 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - AppRedisApplication",
+            "request": "launch",
+            "mainClass": "br.com.lirio.appredis.AppRedisApplication"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - RedisAsDatabaseApplication",
+            "request": "launch",
+            "mainClass": "com.example.redisasdatabase.RedisAsDatabaseApplication"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-AwsConfigServerApplication<aws-config-server>",
             "request": "launch",
             "cwd": "${workspaceFolder}",

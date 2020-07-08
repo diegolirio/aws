@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+  Meu template EC2... 
+  
+Parameters:
+  minhaChaveSSH:
+    Description: Minha Chave SSH
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: virg
+  meuAmbiente:
+    Description: Ambiente de desenvolvimento
+    Type: String
+    Default: develop
+  SubnetGroupIds: 
+    Description: Uma ou mais sub-redes a ser usado para o ec2
+    Type: "List<AWS::EC2::Subnet::Id>"
+    Default: ''    
+  SecurityGroupIds: 
+    Description: Um ou mais grupos de segurança da VPC associados ao ec2.
+    Type: "List<AWS::EC2::SecurityGroup::Id>"
+    Default: ''      
+  
+Mappings:
+  minhaInstanciaMap:
+    us-east-2:
+      "HVM64": ami-07c1207a9d40bc3bd
+    us-east-1:
+      "HVM64": ami-0d7a95455cac37c33
+    sa-east-1:
+      "HVM64": ami-077d5d3682940b34a
+  
+Conditions:
+  CriarOutraInstanciaEC2: !Equals [!Ref meuAmbiente, dev]
+ 
+Resources:
+  MinhaEC2PublicaDemo:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref minhaChaveSSH
+      ImageId: !FindInMap [ minhaInstanciaMap, !Ref 'AWS::Region', HVM64 ]
+      InstanceType: t2.micro
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeviceIndex: "0"
+          SubnetId: !ImportValue VPCGameON-SubNetPublicaID
+          GroupSet:
+            - !ImportValue VPCGameON-SGID
+      Monitoring: false
+      #IamInstanceProfile: arn:aws:iam::241621294044:instance-profile/EC2-AccessFull
+      #SecurityGroupIds:
+        #- !ImportValue infraestructureVPC-SGID
+      #SubnetId: !ImportValue infraestructureVPC-SubNetPublicaID
+      UserData: !Base64 |
+        #!/bin/bash -ex
+        apt update
+        apt install docker.io -y
+        curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose 
+        chmod +x /usr/local/bin/docker-compose
+        wget https://raw.githubusercontent.com/diegolirio/demos-spring-boot/master/redis-as-database/devops/docker-compose.yml
+        wget https://raw.githubusercontent.com/diegolirio/demos-spring-boot/master/redis-as-database/devops/prometheus.yml
+        sudo docker-compose up -d
+        
+      Tags:
+        - Key: Name
+          Value: MinhaEC2PublicaDemoTag
+    
+Outputs:
+  MinhaEC2PublicaDemoExport:
+    Description: Demo Export EC2
+    Value: !Ref MinhaEC2PublicaDemo
+    Export:
+      Name: !Sub "${AWS::StackName}-MinhaEC2DemoID"
