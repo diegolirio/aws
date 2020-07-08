@@ -1,0 +1,48 @@
+version: '3'
+services:
+  app:
+    image: diegolirio/app-redis:0.0.1-SNAPSHOT
+    container_name: appredis
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      - REDIS_HOST=master.redis-cluster-re2.gyyko2.use1.cache.amazonaws.com
+      - REDIS_PORT=6379
+    networks:
+      - elasticache
+    depends_on:
+      - configserver
+  configserver:
+    image: diegolirio/aws-config-server:0.0.1-SNAPSHOT
+    container_name: configserver
+    restart: always
+    ports:
+      - 8089:8089
+    networks:
+      - elasticache      
+  grafana:
+    image: grafana/grafana
+    restart: always
+    ports:
+    - "3000:3000"  
+    networks:
+      - elasticache
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    ports:
+    - 9090:9090
+    command:
+    - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - elasticache
+    depends_on:
+    - app    
+
+networks:
+  elasticache:
+    driver: bridge
