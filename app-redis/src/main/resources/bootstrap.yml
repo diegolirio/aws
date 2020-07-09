@@ -14,7 +14,7 @@ spring:
     name: app-redis
   cloud:
     config:
-      uri: ${CONFIG_URL:http://localhost:8089}    
+      uri: ${CONFIG_URL:http://ec2-3-221-155-76.compute-1.amazonaws.com}
 ---
 spring:
   profiles: production

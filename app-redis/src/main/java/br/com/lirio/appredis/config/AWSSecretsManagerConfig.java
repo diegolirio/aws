@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 
-@Profile("aws")
+@Profile(value = {"develop"})
 @Configuration
 public class AWSSecretsManagerConfig {
 

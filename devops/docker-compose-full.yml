@@ -10,17 +10,19 @@ services:
       #- REDIS_HOST=master.redis-cluster-re2.gyyko2.use1.cache.amazonaws.com
       - REDIS_HOST=redis
       #- REDIS_PORT=6379
-      - CONFIG_URL=configserver:8089
+      #- CONFIG_URL=configserver:8089
     networks:
       - elasticache
     depends_on:
-      - configserver
+      #- configserver
       - redis
   redis:
     image: redis
     #command: redis-server --requirepass Redis2019!
     networks:
       - elasticache        
+    ports:
+      - 6379:6379
   configserver:
     image: diegolirio/aws-config-server:0.0.1-SNAPSHOT
     container_name: configserver
