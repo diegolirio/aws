@@ -2,8 +2,11 @@ server:
   port: 8089
 
 spring:
-  cloud:
-    config:
-      server:
-        git:
-          uri: https://github.com/diegolirio/aws-configs-store
+   cloud:
+     config:
+       server:
+         #vault:
+         #  port: 8200
+         #  host: localhost
+         git:
+           uri: https://github.com/diegolirio/aws-configs-store
