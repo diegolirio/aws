@@ -2,7 +2,7 @@
 
 ##### Config Server
 
-![](./configserver.png)
+![](./configserver_.png)
    
 `Prós:`   
     - Configuração Centralizada   
