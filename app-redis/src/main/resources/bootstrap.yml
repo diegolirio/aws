@@ -15,7 +15,7 @@ spring:
   cloud:
     config:
       #uri: ${CONFIG_URL:http://ec2-3-221-155-76.compute-1.amazonaws.com:8089}
-      uri: ${CONFIG_URL:http://localhost:8089}
+      uri: ${CONFIG_URL:http://ec2-3-221-155-76.compute-1.amazonaws.com:8089}
 
     vault:
       port: 8200

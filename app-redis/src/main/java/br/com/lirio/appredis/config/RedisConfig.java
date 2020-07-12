@@ -15,9 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class RedisConfig {
 
-    @Value("${my.secret}")
-    private String mySecret;
-
     @Value("${spring.redis.host}")
     private String host;
 
@@ -38,12 +35,12 @@ public class RedisConfig {
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
         log.info("Host => {}:{}", host, port);
-        log.info("My Secret => {}", mySecret);
+        //log.info("My Secret => {}", mySecret);
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(host, port);
-        redisStandaloneConfiguration.setDatabase(database);
-        redisStandaloneConfiguration.setPassword(password);
+        //redisStandaloneConfiguration.setDatabase(database);
+        //redisStandaloneConfiguration.setPassword(password);
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisStandaloneConfiguration);
-        jedisConnectionFactory.setUseSsl(ssl);
+        //jedisConnectionFactory.setUseSsl(ssl);
         return jedisConnectionFactory;
     }
 
