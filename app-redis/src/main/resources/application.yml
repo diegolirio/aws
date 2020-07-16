@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: app-redis
+  profiles:
+    active: local
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,redis
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+---
+spring:
+  profiles: default, local
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    ssl: false
+    database: 10
+
+aws:
+  secretsManager:
+    secretName: dev/redis/auth
+    region: region
+
+---
+spring:
+  profiles: develop
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    ssl: true
+    database: 10
+
+aws:
+  secretsManager:
+    secretName: dev/redis/auth
+    region: us-east-1
