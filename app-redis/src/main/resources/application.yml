@@ -36,6 +36,10 @@ aws:
     region: region
 
 ---
+
+server:
+  port: ${SERVER_PORT:8090}
+
 spring:
   profiles: develop
   redis:

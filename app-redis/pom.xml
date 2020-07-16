@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>br.com.lirio</groupId>
 	<artifactId>app-redis</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>app-redis</name>
 	<description>Aws Config Server</description>
 
