@@ -1,5 +1,10 @@
 # AWS
 
+### Spring Boot :: Secrets Manager :: Parameter Store :: ElastiCache
+
+
+
+
 ##### Config Server
 
 ![](./configserver_.png)
