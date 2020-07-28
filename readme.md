@@ -26,10 +26,6 @@ Também é possível configurar rotatividade automática dos segredos para Amazo
 
 Criando um parametro
 
-#### CloudFormation
-
-...
-
 #### Spring Clous AWS
 
 ...
@@ -38,9 +34,9 @@ Criando um parametro
 ![](AWS-Central-Configuration.png)
 
 
-#### Secrets Manager
+#### ElastiCache e CloudFormation
 
-Criando um secret
+...
 
 --- 
 
