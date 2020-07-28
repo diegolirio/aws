@@ -16,6 +16,23 @@ No nosso caso como utilizamos Cloud pública AWS, podemos utilizar o AWS Paramet
 ![](AWS-Central-Configuration.png)
 
 
+#### Parameter Store
+
+...
+
+#### Secrets Manager
+
+...
+
+#### CloudFormation
+
+...
+
+#### Spring Clous AWS
+
+...
+
+
 ##### Config Server
 
 ![](./configserver_.png)
