@@ -2,7 +2,7 @@
 
 ### Spring Boot :: Secrets Manager :: Parameter Store :: ElastiCache
 
-
+![](AWS-Central-Configuration.png)
 
 
 ##### Config Server
