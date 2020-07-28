@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: demo-app-store-config
+---
+spring:
+  profiles: default, local
+
+server:
+  port: 8081
+
+aws:
+  paramstore:
+    enabled: false
+  secretsmanager:
+    enabled: false
+---
+spring:
+  profiles: develop
+
+aws:
+  secretsmanager:
+    name: demo-app
+cloud:
+  aws:
+    region:
+      static: us-east-1

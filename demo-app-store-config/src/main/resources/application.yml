@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: demo-app-store-config
+  profiles: default, local
+
+customer:
+  name: Jonh
+  age: 27
