@@ -24,3 +24,6 @@ cloud:
   aws:
     region:
       static: us-east-1
+
+# demo-app -->  demo-app-store-config_develop/customer.name: Jonh
+# demo-app -->  demo-app-store-config_develop/customer.age: 27
