@@ -9,10 +9,11 @@ server:
   port: 8081
 
 aws:
-  paramstore:
-    enabled: false
   secretsmanager:
     enabled: false
+  paramstore:
+    enabled: false
+
 ---
 spring:
   profiles: develop

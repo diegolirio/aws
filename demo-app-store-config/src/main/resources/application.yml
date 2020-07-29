@@ -6,3 +6,4 @@ spring:
 customer:
   name: Jonh
   age: 27
+  pass: 123456

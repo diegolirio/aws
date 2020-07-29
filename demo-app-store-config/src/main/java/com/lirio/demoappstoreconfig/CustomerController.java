@@ -17,9 +17,12 @@ public class CustomerController {
     @Value("${customer.age}")
     private String age;
 
+    @Value("${customer.pass}")
+    private String pass;
+
     @GetMapping
     public List<String> get() {
-        return List.of(name, age);
+        return List.of(name, age, pass);
     }
 
 }
