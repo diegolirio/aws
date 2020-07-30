@@ -23,9 +23,9 @@ cloud:
 spring:
   profiles: develop
 
-aws:
-  secretsmanager:
-    name: demo-app
+#aws:
+#  secretsmanager:
+#    name: demo-app
 cloud:
   aws:
     region:
