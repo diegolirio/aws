@@ -14,6 +14,11 @@ aws:
   paramstore:
     enabled: false
 
+cloud:
+  aws:
+    region:
+      static: us-east-1
+
 ---
 spring:
   profiles: develop
