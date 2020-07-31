@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.lirio</groupId>
 	<artifactId>demo-app-store-config</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>demo-app-store-config</name>
 	<description>Demo App Store Config</description>
 
@@ -28,12 +28,10 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-aws-parameter-store-config</artifactId>
-			<version>2.2.2.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-aws-secrets-manager-config</artifactId>
-			<version>2.2.2.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -50,6 +48,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>

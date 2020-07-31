@@ -1,12 +1,14 @@
 spring:
   application:
     name: demo-app-store-config
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 ---
 spring:
   profiles: default, local
-
-server:
-  port: 8081
 
 aws:
   secretsmanager:
