@@ -10,7 +10,7 @@ public class PassConfig {
     @Value("${customer.pass}")
     private String pass;
 
-    @Bean
+    @Bean("pass")
     public String getPass() {
         return this.pass;
     }

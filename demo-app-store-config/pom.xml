@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.lirio</groupId>
 	<artifactId>demo-app-store-config</artifactId>
-	<version>0.0.5-SNAPSHOT</version>
+	<version>0.0.6-SNAPSHOT</version>
 	<name>demo-app-store-config</name>
 	<description>Demo App Store Config</description>
 

@@ -1,5 +1,7 @@
 package com.lirio.demoappstoreconfig;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +21,13 @@ public class CustomerController {
     @Value("${customer.age}")
     private String age;
 
+    @Autowired
+    @Qualifier("pass")
+    private String pass;
+
     @GetMapping
     public List<String> get() {
-        return List.of(name, age);
+        return List.of(name, age, pass);
     }
 
 }
