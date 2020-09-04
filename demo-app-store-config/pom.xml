@@ -80,7 +80,7 @@
 				<configuration>
 					<imageName>${registry}/${project.artifactId}:${project.version}</imageName>
 					<baseImage>fabric8/java-alpine-openjdk11-jre</baseImage>
-					<entryPoint>["java", "-jar", "-Dspring.profiles.active=develop", "/${project.build.finalName}.jar"]</entryPoint>
+					<entryPoint>["java", "-jar", "-Dspring.profiles.active=homolog", "/${project.build.finalName}.jar"]</entryPoint>
 					<resources>
 						<resource>
 							<targetPath>/</targetPath>
