@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    image: diegolirio/demo-app-store-config:0.0.4-SNAPSHOT
+    image: diegolirio/demo-app-store-config:0.0.5-SNAPSHOT
     container_name: demo-app-store-config
     restart: always
     ports:
